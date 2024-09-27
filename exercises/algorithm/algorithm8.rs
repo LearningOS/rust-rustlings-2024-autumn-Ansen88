@@ -2,7 +2,6 @@
 	queue
 	This question requires you to use queues to implement the functionality of the stac
 */
-// I AM NOT DONE
 
 #[derive(Debug)]
 pub struct Queue<T> {
@@ -22,7 +21,8 @@ impl<T> Queue<T> {
 
     pub fn dequeue(&mut self) -> Result<T, &str> {
         if !self.elements.is_empty() {
-            Ok(self.elements.remove(0usize))
+            // Ok(self.elements.remove(0usize))
+            Ok(self.elements.pop().unwrap())
         } else {
             Err("Queue is empty")
         }
@@ -56,47 +56,28 @@ pub struct myStack<T>
 {
 	//TODO
 	q1:Queue<T>,
-	q2:Queue<T>,
-    top: Option<T>
+	// q2:Queue<T>
 }
 impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
 			//TODO
 			q1:Queue::<T>::new(),
-			q2:Queue::<T>::new(),
-            top: None
+			// q2:Queue::<T>::new()
         }
     }
     pub fn push(&mut self, elem: T) {
         //TODO
-        // Move all elements from q1 to q2 except the last one
-        while let Ok(val) = self.q1.dequeue() {
-            self.q2.enqueue(val).unwrap_or_else(|_| ());
-        }
-
-        // Push the new element into q1
-        self.q1.enqueue(elem).unwrap_or_else(|_| ());
-
-        // Swap q1 and q2
-        std::mem::swap(&mut self.q1, &mut self.q2);
-
-        // Update the top element
-        if let Ok(val) = self.q1.peek() {
-            self.top = Some(val.clone());
-        }
+        self.q1.enqueue(elem);
     }
     pub fn pop(&mut self) -> Result<T, &str> {
         //TODO
-		// Err("Stack is empty")
-        if self.q1.is_empty() {
-            Err("Stack is empty")
-        } else {
-            // Pop the top element from q1
-            let top_element = self.q1.dequeue()?;
-            self.top = None;
-            Ok(top_element)
+        if self.is_empty(){
+            return Err("Stack is empty");
+        }else{
+            return Ok(self.q1.dequeue().unwrap());
         }
+		
     }
     pub fn is_empty(&self) -> bool {
 		//TODO

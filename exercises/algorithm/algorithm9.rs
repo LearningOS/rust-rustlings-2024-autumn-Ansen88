@@ -2,7 +2,6 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -38,8 +37,21 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        if self.count == 0 {
+            self.items.clear();
+        }
+        self.items.push(value);
+        self.count += 1;
+        self.sift_up(self.count - 1);
     }
 
+    fn sift_up(&mut self, mut index: usize) {
+        while index > 0 && ((self.comparator)(&self.items[index], &self.items[(index - 1) / 2])) {
+            self.items.swap(index, (index - 1) / 2);
+            index = (index - 1) / 2;
+        }
+    }
+    
     fn parent_idx(&self, idx: usize) -> usize {
         idx / 2
     }
@@ -56,9 +68,19 @@ where
         self.left_child_idx(idx) + 1
     }
 
-    fn smallest_child_idx(&self, idx: usize) -> usize {
+    fn smallest_child_idx(&self, idx: usize) -> Option<usize> {
         //TODO
-		0
+		// 0
+        let left = self.left_child_idx(idx);
+        let right = self.right_child_idx(idx);
+        if left >= self.count {
+            return None;
+        }
+        if right >= self.count || ((self.comparator)(&self.items[left], &self.items[right])) {
+            Some(left)
+        } else {
+            Some(right)
+        }
     }
 }
 
@@ -85,7 +107,13 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+		// None
+        if self.is_empty() {
+            return None;
+        }
+        let root = self.items.remove(0);
+        self.count -= 1;
+        Some(root)
     }
 }
 
